@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Toby's Rune Rush",
   },
   description: "A magical premium match-3 rune puzzle built to play fast on mobile, web, and Base App.",
-  manifest: "/manifest.webmanifest?v=146",
+  manifest: "/manifest.webmanifest?v=147",
   other:{
     "base:app_id": "6a30fa944e2691d4f4e29bb0",
   },
