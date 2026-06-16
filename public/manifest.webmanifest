@@ -1,0 +1,26 @@
+{
+  "name": "Toby's Rune Rush",
+  "short_name": "Rune Rush",
+  "description": "A magical premium match-3 rune puzzle built to play fast on mobile, web, and Base App.",
+  "start_url": "/?source=base-app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020604",
+  "theme_color": "#020604",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "/runes/lotus.png",
+      "sizes": "500x500",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/1111.webp",
+      "sizes": "1024x1024",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ]
+}
