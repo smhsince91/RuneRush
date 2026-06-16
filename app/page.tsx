@@ -388,8 +388,9 @@ export default function RuneRushPixiFullPage() {
   const soundMenuRef = useRef<HTMLDivElement | null>(null);
   const previousPhaseRef = useRef<HudState["phase"]>("idle");
   const audioSettingsLoadedRef = useRef(false);
-  const boardKey = useMemo(() => `pixi-full-v143-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
+  const boardKey = useMemo(() => `pixi-full-v144-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
   const canPlay = runAllowed || lifeState.lives > 0;
+  const outOfLives = lifeState.loaded && lifeState.lives <= 0 && !canPlay;
   const currentBestScore = getBestScore(bestScores, levelIndex);
   const displayedBestScore = currentBestScore;
   const gameSoundsOn = audioSettings.gameSounds;
@@ -538,7 +539,7 @@ export default function RuneRushPixiFullPage() {
   };
 
   useEffect(() => {
-    console.log("[Rune Rush Page] loaded v143-mobile-fullscreen-layout");
+    console.log("[Rune Rush Page] loaded v144-out-of-lives-clarity");
     return () => {
       if (musicFadeRef.current != null) window.cancelAnimationFrame(musicFadeRef.current);
       musicFadeRef.current = null;
@@ -720,6 +721,11 @@ export default function RuneRushPixiFullPage() {
     }
   };
 
+  const dismissOutOfLivesNotice = () => {
+    showNoLives();
+    setHud((prev) => (prev.phase === "fail" ? { ...prev, phase: "idle", message: "Out of lives" } : prev));
+  };
+
   const startLevel = (nextLevelIndex: number) => {
     const safeNext = Math.max(0, nextLevelIndex);
     const unlockedNow = Math.max(highestUnlocked, loadUnlockedLevel());
@@ -798,7 +804,7 @@ export default function RuneRushPixiFullPage() {
   };
 
   return (
-    <main className="pageShell">
+    <main className={outOfLives ? "pageShell outOfLives" : "pageShell"}>
       <section className="infoHubBoard" aria-label="Rune Rush information">
       <header className="topNav">
         <div className="levelPill">
@@ -806,10 +812,10 @@ export default function RuneRushPixiFullPage() {
           <b>{hud.level}</b>
         </div>
 
-        <div className="lifePill">
+        <div className={outOfLives ? "lifePill empty" : "lifePill"}>
           <span className="lifeIcon" aria-label="Lives">{"\u2665"}</span>
           <b>{lifeState.lives}</b>
-          <small>{lifeState.lives < MAX_LIVES ? lifeState.countdown : "FULL"}</small>
+          <small>{outOfLives ? "OUT" : lifeState.lives < MAX_LIVES ? lifeState.countdown : "FULL"}</small>
         </div>
       </header>
 
@@ -883,6 +889,7 @@ export default function RuneRushPixiFullPage() {
         ) : (
           <div className="noLivesBoard">
             <div className="noLivesIcon">♥</div>
+            <div className="noLivesBadge">0 lives left</div>
             <h2>{lifeState.lives <= 0 ? "Out of lives" : "Loading level"}</h2>
             <p>{lifeState.lives <= 0 ? `Next life in ${lifeState.countdown}` : "Preparing the pond..."}</p>
           </div>
@@ -1032,11 +1039,15 @@ export default function RuneRushPixiFullPage() {
 
       {hud.phase === "fail" && (
         <div className="modalShade">
-          <div className="modalCard">
-            <h2>OUT OF MOVES</h2>
-            <p>{outOfMovesQuote}</p>
+          <div className={outOfLives ? "modalCard outLivesModal" : "modalCard"}>
+            <h2>{outOfLives ? "OUT OF LIVES" : "OUT OF MOVES"}</h2>
+            <p>{outOfLives ? `Next life in ${lifeState.countdown}. Hearts refill over time.` : outOfMovesQuote}</p>
             <div className="modalBtns">
-              <button onClick={retryFailedLevel}>Retry</button>
+              {outOfLives ? (
+                <button onClick={dismissOutOfLivesNotice}>Okay</button>
+              ) : (
+                <button onClick={retryFailedLevel}>Retry</button>
+              )}
             </div>
           </div>
         </div>
@@ -1272,6 +1283,26 @@ export default function RuneRushPixiFullPage() {
         .lifePill small {
           font-size: 10px;
           color: rgba(255, 245, 210, 0.65);
+        }
+
+        .lifePill.empty {
+          border-color: rgba(255, 106, 112, 0.45);
+          box-shadow:
+            0 12px 26px rgba(0, 0, 0, 0.5),
+            0 0 18px rgba(255, 86, 96, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12),
+            inset 0 -10px 20px rgba(0,0,0,0.18);
+        }
+
+        .lifePill.empty .lifeIcon,
+        .lifePill.empty b {
+          color: #ff6972;
+          text-shadow: 0 0 11px rgba(255, 92, 105, 0.46);
+        }
+
+        .lifePill.empty small {
+          color: #ffd7d0;
+          font-weight: 950;
         }
 
         .infoHubBoard .levelPill,
@@ -1685,6 +1716,7 @@ export default function RuneRushPixiFullPage() {
           margin: 0;
           font-size: 24px;
           letter-spacing: 0.03em;
+          text-transform: uppercase;
         }
 
         .noLivesBoard p {
@@ -1697,6 +1729,18 @@ export default function RuneRushPixiFullPage() {
           font-size: 36px;
           color: #ff6e75;
           text-shadow: 0 0 20px rgba(255, 90, 100, 0.4);
+        }
+
+        .noLivesBadge {
+          border-radius: 999px;
+          padding: 5px 11px;
+          color: #2a0704;
+          background: linear-gradient(180deg, #ffd0c7, #ff737b);
+          box-shadow: 0 8px 18px rgba(0,0,0,0.22), 0 0 18px rgba(255, 99, 108, 0.22);
+          font-size: 10px;
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
         }
 
 
@@ -2150,6 +2194,19 @@ export default function RuneRushPixiFullPage() {
         }
 
         .modalCard p { color: rgba(255, 245, 210, 0.72); }
+
+        .outLivesModal {
+          border-color: rgba(255, 118, 120, 0.34);
+          box-shadow:
+            0 24px 60px rgba(0,0,0,0.52),
+            0 0 34px rgba(255, 93, 105, 0.18),
+            inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        .outLivesModal h2 {
+          color: #ffd9d2;
+          text-shadow: 0 0 18px rgba(255, 96, 108, 0.28);
+        }
 
         .modalBtns {
           display: grid;
