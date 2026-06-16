@@ -21,7 +21,9 @@ export const metadata: Metadata = {
   },
   description: "A magical premium match-3 rune puzzle built to play fast on mobile, web, and Base App.",
   manifest: "/manifest.webmanifest?v=141",
-  <meta name="base:app_id" content="6a30fa944e2691d4f4e29bb0" />
+  other:{
+    "base:app_id": "6a30fa944e2691d4f4e29bb0",
+  },
   appleWebApp: {
     capable: true,
     title: "Rune Rush",
