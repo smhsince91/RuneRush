@@ -392,7 +392,7 @@ export default function RuneRushPixiFullPage() {
   const mobileLayoutFrameRef = useRef<number | null>(null);
   const previousPhaseRef = useRef<HudState["phase"]>("idle");
   const audioSettingsLoadedRef = useRef(false);
-  const boardKey = useMemo(() => `pixi-full-v148-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
+  const boardKey = useMemo(() => `pixi-full-v150-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
   const canPlay = runAllowed || lifeState.lives > 0;
   const outOfLives = lifeState.loaded && lifeState.lives <= 0 && !canPlay;
   const currentBestScore = getBestScore(bestScores, levelIndex);
@@ -452,8 +452,8 @@ export default function RuneRushPixiFullPage() {
       const heightLimit = Math.max(180, verticalSpace);
       const boardSize = Math.floor(Math.min(widthLimit, heightLimit));
       const spareHeight = Math.max(0, heightLimit - boardSize);
-      const fillGap = Math.round(Math.min(6, Math.max(3, spareHeight * 0.025)));
-      const hubExtra = Math.round(Math.min(12, spareHeight * 0.08));
+      const fillGap = Math.round(Math.min(4, Math.max(2, spareHeight * 0.018)));
+      const hubExtra = Math.round(Math.min(14, spareHeight * 0.08));
       const hubPadExtra = Math.round(Math.min(4, hubExtra * 0.25));
       const hubGapExtra = Math.round(Math.min(3, hubExtra * 0.16));
       const hubControlExtra = Math.round(Math.min(5, hubExtra * 0.28));
@@ -637,7 +637,7 @@ export default function RuneRushPixiFullPage() {
   };
 
   useEffect(() => {
-    console.log("[Rune Rush Page] loaded v148-premium-mobile-dashboard");
+    console.log("[Rune Rush Page] loaded v150-forest-backdrop");
     return () => {
       if (musicFadeRef.current != null) window.cancelAnimationFrame(musicFadeRef.current);
       musicFadeRef.current = null;
@@ -1175,14 +1175,37 @@ export default function RuneRushPixiFullPage() {
           min-height: 100vh;
           min-height: 100dvh;
           width: 100%;
+          position: relative;
+          isolation: isolate;
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: clamp(3px, 0.55dvh, 6px);
           padding: max(6px, env(safe-area-inset-top)) 10px max(3px, env(safe-area-inset-bottom));
+          background: transparent;
+        }
+
+        .pageShell::before,
+        .pageShell::after {
+          content: "";
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+        }
+
+        .pageShell::before {
+          z-index: -2;
+          background: url("/runerusaaaaahbg.webp") center center / cover no-repeat;
+          transform: translateZ(0);
+          will-change: transform;
+        }
+
+        .pageShell::after {
+          z-index: -1;
           background:
-            radial-gradient(circle at 50% 0%, rgba(18, 80, 42, 0.34), rgba(0, 0, 0, 0) 44%),
-            linear-gradient(180deg, #06140f 0%, #020604 58%, #010302 100%);
+            radial-gradient(circle at 50% 0%, rgba(250, 235, 150, 0.12), rgba(0, 0, 0, 0) 34%),
+            radial-gradient(circle at 50% 54%, rgba(2, 20, 12, 0.12), rgba(0, 0, 0, 0.68) 74%),
+            linear-gradient(180deg, rgba(1, 8, 5, 0.26) 0%, rgba(1, 6, 4, 0.58) 58%, rgba(1, 3, 2, 0.76) 100%);
         }
 
         .pageShell {
@@ -1233,24 +1256,24 @@ export default function RuneRushPixiFullPage() {
           display: grid;
           grid-template-columns: minmax(48px, 0.74fr) minmax(62px, 0.98fr) repeat(4, minmax(45px, 0.74fr));
           gap: 5px;
-          padding: 7px;
+          padding: 8px;
           border-radius: 17px;
           overflow: hidden;
           isolation: isolate;
           background-color: rgba(2, 3, 3, 0.62);
           background-image:
-            radial-gradient(130% 90% at 50% 0%, rgba(255, 220, 142, 0.09), rgba(255, 220, 142, 0) 58%),
+            radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0) 58%),
             linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.38)),
             linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.42)),
             url("/textures/obsidian.png"),
             url("/textures/stone.png");
           background-size: cover;
           background-position: center;
-          border: 1px solid rgba(255, 215, 132, 0.24);
+          border: 1px solid rgba(255, 255, 255, 0.11);
           box-shadow:
             0 14px 28px rgba(0, 0, 0, 0.50),
-            0 0 0 1px rgba(255, 207, 106, 0.05),
-            0 0 18px rgba(255, 198, 84, 0.08),
+            0 0 0 1px rgba(255, 255, 255, 0.035),
+            0 0 18px rgba(0, 0, 0, 0.18),
             inset 0 1px 0 rgba(255, 246, 210, 0.14),
             inset 0 -12px 22px rgba(0,0,0,0.24);
         }
@@ -1271,16 +1294,7 @@ export default function RuneRushPixiFullPage() {
 
         .infoHubBoard::after {
           content: "";
-          position: absolute;
-          inset: 2px;
-          z-index: 0;
-          border-radius: calc(17px - 2px);
-          pointer-events: none;
-          border: 1px solid rgba(255, 214, 124, 0.16);
-          box-shadow:
-            inset 0 0 0 1px rgba(0,0,0,0.32),
-            inset 0 1px 0 rgba(255,255,255,0.08),
-            0 0 12px rgba(255, 208, 106, 0.09);
+          display: none;
         }
 
         .infoHubBoard > * {
@@ -1322,12 +1336,12 @@ export default function RuneRushPixiFullPage() {
             url("/textures/stone.png");
           background-size: cover;
           background-position: center;
-          border: 1px solid rgba(255, 220, 150, 0.15);
+          border: 1px solid rgba(255, 255, 255, 0.09);
           box-shadow:
             inset 0 2px 4px rgba(0,0,0,0.42),
-            inset 0 -1px 0 rgba(255, 236, 190, 0.05),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.04),
             inset 0 1px 0 rgba(255, 255, 255, 0.055),
-            0 1px 0 rgba(255, 236, 180, 0.04);
+            0 1px 0 rgba(255, 255, 255, 0.035);
         }
 
         .infoHubBoard .levelPill::after,
@@ -2033,7 +2047,7 @@ export default function RuneRushPixiFullPage() {
         }
 
         .bottomBar button {
-          height: 38px;
+          height: 42px;
           border-radius: 15px;
           font-weight: 900;
           text-transform: uppercase;
@@ -2367,29 +2381,31 @@ export default function RuneRushPixiFullPage() {
             min-height: 0;
             max-height: var(--mobile-vh, 100dvh);
             justify-content: flex-start;
-            gap: var(--mobile-fill-gap, 4px);
+            gap: var(--mobile-fill-gap, 3px);
             overflow: hidden;
             padding-top: max(16px, calc(env(safe-area-inset-top) + 10px));
             padding-left: 6px;
             padding-right: 6px;
-            padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 20px));
+            padding-bottom: max(34px, calc(env(safe-area-inset-bottom) + 30px));
           }
           .infoHubBoard {
+            width: min(calc(100vw - 8px), calc(var(--game-w) + 20px));
+            max-width: min(590px, calc(100vw - 8px));
             grid-template-columns: minmax(45px, 0.72fr) minmax(60px, 0.95fr) repeat(4, minmax(42px, 0.72fr));
-            padding: calc(7px + var(--mobile-hub-pad-extra, 0px));
-            border-radius: 17px;
+            padding: calc(9px + var(--mobile-hub-pad-extra, 0px));
+            border-radius: 18px;
             gap: calc(4px + var(--mobile-hub-gap-extra, 0px));
             box-shadow:
               0 15px 30px rgba(0, 0, 0, 0.54),
-              0 0 0 1px rgba(255, 210, 112, 0.06),
-              0 0 18px rgba(255, 201, 92, 0.10),
+              0 0 0 1px rgba(255, 255, 255, 0.035),
+              0 0 18px rgba(0, 0, 0, 0.22),
               inset 0 1px 0 rgba(255, 246, 210, 0.15),
               inset 0 -12px 22px rgba(0,0,0,0.26);
           }
           .topNav { grid-template-columns: 1fr 1fr; gap: 6px; }
           .infoHubBoard .topNav { display: contents; }
           .arrowBtn, .levelPill, .lifePill { height: 44px; border-radius: 14px; }
-          .infoHubBoard .levelPill, .infoHubBoard .lifePill { height: calc(33px + var(--mobile-hub-control-extra, 0px)); border-radius: 11px; gap: 4px; padding: 4px 5px; font-size: 8.8px; letter-spacing: 0; }
+          .infoHubBoard .levelPill, .infoHubBoard .lifePill { height: calc(36px + var(--mobile-hub-control-extra, 0px)); border-radius: 12px; gap: 4px; padding: 5px 6px; font-size: 8.8px; letter-spacing: 0; }
           .levelPill b, .lifePill b { font-size: 24px; }
           .infoHubBoard .levelPill b, .infoHubBoard .lifePill b { font-size: 16px; }
           .lifePill small { font-size: 10px; }
@@ -2397,7 +2413,7 @@ export default function RuneRushPixiFullPage() {
           .statsRow { gap: 6px; }
           .stat { min-height: 45px; border-radius: 13px; }
           .infoHubBoard .statsRow { gap: 4px; }
-          .infoHubBoard .stat { min-height: calc(33px + var(--mobile-hub-control-extra, 0px)); border-radius: 10px; padding: 3px 4px; }
+          .infoHubBoard .stat { min-height: calc(36px + var(--mobile-hub-control-extra, 0px)); border-radius: 11px; padding: 4px 5px; }
           .stat span, .eyebrow { font-size: 9px; }
           .infoHubBoard .stat span, .infoHubBoard .eyebrow { font-size: 7.8px; letter-spacing: 0; }
           .stat b { font-size: 20px; }
@@ -2405,7 +2421,7 @@ export default function RuneRushPixiFullPage() {
           .infoHubBoard .stat:nth-child(4) b,
           .infoHubBoard .bestStat b { font-size: 11px; }
           .goalCard { min-height: 48px; padding: 5px 8px; border-radius: 15px; grid-template-columns: 31px 1fr; }
-          .infoHubBoard .goalCard { min-height: calc(52px + var(--mobile-hub-goal-extra, 0px)); padding: 7px 8px; border-radius: 12px; grid-template-columns: minmax(0, 1fr); gap: 0; }
+          .infoHubBoard .goalCard { min-height: calc(59px + var(--mobile-hub-goal-extra, 0px)); padding: 8px 9px; border-radius: 13px; grid-template-columns: minmax(0, 1fr); gap: 0; }
           .goalTitle { font-size: 14px; }
           .infoHubBoard .goalTitle { font-size: 13px; }
           .goalCount { font-size: 15px; }
@@ -2425,14 +2441,14 @@ export default function RuneRushPixiFullPage() {
           .infoHubLine { font-size: 9.5px; margin-top: 3px; }
           .infoHubBoard .infoHubLine { font-size: 8.2px; margin-top: 2px; line-height: 1.08; }
           .boardFrame { width: var(--game-w); min-width: min(282px, 94vw); padding: 0; border-radius: 20px; flex: 0 0 auto; }
-          .bottomBar { grid-template-columns: 0.64fr 1fr 1fr 0.64fr; gap: 5px; margin-top: auto; }
-          .bottomBar button { height: 39px; font-size: 8.9px; border-radius: 14px; padding-inline: 5px; }
+          .bottomBar { width: min(calc(100vw - 8px), calc(var(--game-w) + 20px)); max-width: min(590px, calc(100vw - 8px)); grid-template-columns: 0.68fr 1fr 1fr 0.68fr; gap: 6px; margin-top: auto; }
+          .bottomBar button { height: 45px; font-size: 8.9px; border-radius: 16px; padding-inline: 7px; }
           .bottomLevelArrow { font-size: 22px; }
           .soundMenu {
             position: fixed;
             left: 50%;
             right: auto;
-            bottom: calc(max(24px, calc(env(safe-area-inset-bottom) + 20px)) + 50px);
+            bottom: calc(max(34px, calc(env(safe-area-inset-bottom) + 30px)) + 58px);
             width: min(288px, calc(100vw - 20px));
             max-height: min(340px, calc(100dvh - 112px));
             overflow-y: auto;
@@ -2464,7 +2480,7 @@ export default function RuneRushPixiFullPage() {
           .lifeMessage {
             position: fixed;
             left: 50%;
-            bottom: calc(max(24px, calc(env(safe-area-inset-bottom) + 20px)) + 50px);
+            bottom: calc(max(34px, calc(env(safe-area-inset-bottom) + 30px)) + 58px);
             transform: translateX(-50%);
             margin: 0;
             z-index: 15;
@@ -2474,19 +2490,19 @@ export default function RuneRushPixiFullPage() {
         @media (max-width: 640px) and (max-height: 760px), (hover: none) and (pointer: coarse) and (max-width: 920px) and (max-height: 760px) {
           .pageShell {
             --game-w: min(98vw, 540px);
-            gap: 3px;
+            gap: 2px;
             padding-top: max(12px, calc(env(safe-area-inset-top) + 8px));
-            padding-bottom: max(18px, calc(env(safe-area-inset-bottom) + 14px));
+            padding-bottom: max(28px, calc(env(safe-area-inset-bottom) + 24px));
           }
-          .infoHubBoard { padding: 4px; gap: 2px; }
+          .infoHubBoard { padding: 6px; gap: 3px; }
           .infoHubBoard .levelPill,
-          .infoHubBoard .lifePill { height: 30px; padding-block: 3px; }
-          .infoHubBoard .stat { min-height: 30px; padding-block: 2px; }
-          .infoHubBoard .goalCard { min-height: 43px; padding-block: 4px; }
+          .infoHubBoard .lifePill { height: 33px; padding-block: 4px; }
+          .infoHubBoard .stat { min-height: 33px; padding-block: 3px; }
+          .infoHubBoard .goalCard { min-height: 49px; padding-block: 5px; }
           .infoHubBoard .infoHubLine { display: none; }
-          .bottomBar button { height: 36px; font-size: 8.5px; }
+          .bottomBar button { height: 41px; font-size: 8.5px; }
           .soundMenu {
-            bottom: calc(max(18px, calc(env(safe-area-inset-bottom) + 14px)) + 46px);
+            bottom: calc(max(28px, calc(env(safe-area-inset-bottom) + 24px)) + 54px);
             max-height: min(318px, calc(100dvh - 92px));
           }
           .modalCard {
