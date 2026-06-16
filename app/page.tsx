@@ -388,7 +388,7 @@ export default function RuneRushPixiFullPage() {
   const soundMenuRef = useRef<HTMLDivElement | null>(null);
   const previousPhaseRef = useRef<HudState["phase"]>("idle");
   const audioSettingsLoadedRef = useRef(false);
-  const boardKey = useMemo(() => `pixi-full-v142-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
+  const boardKey = useMemo(() => `pixi-full-v143-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
   const canPlay = runAllowed || lifeState.lives > 0;
   const currentBestScore = getBestScore(bestScores, levelIndex);
   const displayedBestScore = currentBestScore;
@@ -538,7 +538,7 @@ export default function RuneRushPixiFullPage() {
   };
 
   useEffect(() => {
-    console.log("[Rune Rush Page] loaded v142-mobile-audio-polish");
+    console.log("[Rune Rush Page] loaded v143-mobile-fullscreen-layout");
     return () => {
       if (musicFadeRef.current != null) window.cancelAnimationFrame(musicFadeRef.current);
       musicFadeRef.current = null;
@@ -2164,66 +2164,92 @@ export default function RuneRushPixiFullPage() {
         }
 
         @media (max-width: 460px) {
+          html,
+          body {
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+          }
+
           .pageShell {
-            --game-w: min(98vw, 540px, calc(100dvh - 154px));
-            gap: 2px;
-            padding-top: max(5px, env(safe-area-inset-top));
+            --game-w: min(98vw, 540px, calc(100dvh - 168px));
+            height: 100svh;
+            height: 100dvh;
+            min-height: 0;
+            max-height: 100dvh;
+            justify-content: space-between;
+            gap: clamp(4px, 0.75dvh, 8px);
+            overflow: hidden;
+            padding-top: max(8px, env(safe-area-inset-top));
             padding-left: 6px;
             padding-right: 6px;
-            padding-bottom: max(1px, env(safe-area-inset-bottom));
+            padding-bottom: max(8px, env(safe-area-inset-bottom));
           }
-          .infoHubBoard { grid-template-columns: minmax(44px, 0.72fr) minmax(58px, 0.95fr) repeat(4, minmax(41px, 0.72fr)); padding: 4px; border-radius: 15px; gap: 3px; }
+          .infoHubBoard { grid-template-columns: minmax(45px, 0.72fr) minmax(60px, 0.95fr) repeat(4, minmax(42px, 0.72fr)); padding: 6px; border-radius: 16px; gap: 4px; }
           .topNav { grid-template-columns: 1fr 1fr; gap: 6px; }
           .infoHubBoard .topNav { display: contents; }
           .arrowBtn, .levelPill, .lifePill { height: 44px; border-radius: 14px; }
-          .infoHubBoard .levelPill, .infoHubBoard .lifePill { height: 28px; border-radius: 10px; gap: 4px; padding: 3px 4px; font-size: 8.4px; letter-spacing: 0; }
+          .infoHubBoard .levelPill, .infoHubBoard .lifePill { height: 31px; border-radius: 11px; gap: 4px; padding: 4px 5px; font-size: 8.8px; letter-spacing: 0; }
           .levelPill b, .lifePill b { font-size: 24px; }
-          .infoHubBoard .levelPill b, .infoHubBoard .lifePill b { font-size: 15px; }
+          .infoHubBoard .levelPill b, .infoHubBoard .lifePill b { font-size: 16px; }
           .lifePill small { font-size: 10px; }
-          .infoHubBoard .lifePill small { min-width: 27px; max-width: 30px; font-size: 7.8px; }
+          .infoHubBoard .lifePill small { min-width: 28px; max-width: 31px; font-size: 8px; }
           .statsRow { gap: 6px; }
           .stat { min-height: 45px; border-radius: 13px; }
-          .infoHubBoard .statsRow { gap: 3px; }
-          .infoHubBoard .stat { min-height: 28px; border-radius: 9px; padding: 2px 3px; }
+          .infoHubBoard .statsRow { gap: 4px; }
+          .infoHubBoard .stat { min-height: 31px; border-radius: 10px; padding: 3px 4px; }
           .stat span, .eyebrow { font-size: 9px; }
-          .infoHubBoard .stat span, .infoHubBoard .eyebrow { font-size: 7.3px; letter-spacing: 0; }
+          .infoHubBoard .stat span, .infoHubBoard .eyebrow { font-size: 7.8px; letter-spacing: 0; }
           .stat b { font-size: 20px; }
-          .infoHubBoard .stat b { font-size: 11px; }
+          .infoHubBoard .stat b { font-size: 12px; }
           .infoHubBoard .stat:nth-child(4) b,
-          .infoHubBoard .bestStat b { font-size: 10.2px; }
+          .infoHubBoard .bestStat b { font-size: 11px; }
           .goalCard { min-height: 48px; padding: 5px 8px; border-radius: 15px; grid-template-columns: 31px 1fr; }
-          .infoHubBoard .goalCard { min-height: 41px; padding: 4px 6px; border-radius: 11px; grid-template-columns: minmax(0, 1fr); gap: 0; }
+          .infoHubBoard .goalCard { min-height: 48px; padding: 6px 7px; border-radius: 12px; grid-template-columns: minmax(0, 1fr); gap: 0; }
           .goalTitle { font-size: 14px; }
-          .infoHubBoard .goalTitle { font-size: 12.5px; }
+          .infoHubBoard .goalTitle { font-size: 13px; }
           .goalCount { font-size: 15px; }
-          .infoHubBoard .goalCount { max-width: 74px; font-size: 11.5px; padding-inline: 4px; }
+          .infoHubBoard .goalCount { max-width: 82px; font-size: 12.2px; padding-inline: 5px; }
           .goalSide { gap: 4px; }
           .collectRuneBadge { height: 27px; min-width: 29px; padding-inline: 3px; }
           .collectRuneBadge img { width: 21px; height: 21px; }
           .collectRuneBadge b { display: none; }
-          .infoHubBoard .collectRuneBadge { height: 22px; min-width: 25px; padding-inline: 2px; }
-          .infoHubBoard .collectRuneBadge img { width: 18px; height: 18px; }
+          .infoHubBoard .collectRuneBadge { height: 24px; min-width: 27px; padding-inline: 2px; }
+          .infoHubBoard .collectRuneBadge img { width: 19px; height: 19px; }
           .infoHubBoard .collectRuneBadge b { display: none; }
           .ingredientHubShowcase img:first-child { width: 18px; height: 26px; margin-right: -6px; }
           .ingredientHubShowcase img:last-child { width: 24px; height: 24px; }
-          .infoHubBoard .ingredientHubShowcase img:first-child { width: 16px; height: 23px; margin-right: -6px; }
-          .infoHubBoard .ingredientHubShowcase img:last-child { width: 21px; height: 21px; }
+          .infoHubBoard .ingredientHubShowcase img:first-child { width: 17px; height: 25px; margin-right: -6px; }
+          .infoHubBoard .ingredientHubShowcase img:last-child { width: 23px; height: 23px; }
           .messageLine { display: none; }
           .infoHubLine { font-size: 9.5px; margin-top: 3px; }
-          .infoHubBoard .infoHubLine { font-size: 7.8px; margin-top: 1px; line-height: 1.05; }
-          .boardFrame { width: var(--game-w); min-width: min(282px, 94vw); padding: 0; border-radius: 20px; }
+          .infoHubBoard .infoHubLine { font-size: 8.2px; margin-top: 2px; line-height: 1.08; }
+          .boardFrame { width: var(--game-w); min-width: min(282px, 94vw); padding: 0; border-radius: 20px; flex: 0 1 auto; }
           .bottomBar { grid-template-columns: 0.64fr 1fr 1fr 0.64fr; gap: 4px; }
-          .bottomBar button { height: 34px; font-size: 8.8px; border-radius: 13px; padding-inline: 5px; }
+          .bottomBar button { height: 35px; font-size: 8.8px; border-radius: 13px; padding-inline: 5px; }
           .bottomLevelArrow { font-size: 22px; }
+          .lifeMessage {
+            position: fixed;
+            left: 50%;
+            bottom: calc(max(8px, env(safe-area-inset-bottom)) + 40px);
+            transform: translateX(-50%);
+            margin: 0;
+            z-index: 15;
+          }
         }
 
         @media (max-width: 460px) and (max-height: 760px) {
           .pageShell {
-            --game-w: min(98vw, 540px, calc(100dvh - 140px));
-            gap: 1px;
+            --game-w: min(98vw, 540px, calc(100dvh - 146px));
+            gap: 2px;
+            padding-top: max(6px, env(safe-area-inset-top));
+            padding-bottom: max(6px, env(safe-area-inset-bottom));
           }
           .infoHubBoard { padding: 4px; gap: 2px; }
-          .infoHubBoard .goalCard { min-height: 39px; padding-block: 3px; }
+          .infoHubBoard .levelPill,
+          .infoHubBoard .lifePill { height: 28px; padding-block: 3px; }
+          .infoHubBoard .stat { min-height: 28px; padding-block: 2px; }
+          .infoHubBoard .goalCard { min-height: 40px; padding-block: 4px; }
           .infoHubBoard .infoHubLine { display: none; }
           .bottomBar button { height: 33px; font-size: 8.5px; }
         }
