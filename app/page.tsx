@@ -386,9 +386,13 @@ export default function RuneRushPixiFullPage() {
   const youtubeMusicFallbackRef = useRef(false);
   const youtubeFrameRef = useRef<HTMLIFrameElement | null>(null);
   const soundMenuRef = useRef<HTMLDivElement | null>(null);
+  const pageShellRef = useRef<HTMLElement | null>(null);
+  const infoHubRef = useRef<HTMLElement | null>(null);
+  const bottomBarRef = useRef<HTMLElement | null>(null);
+  const mobileLayoutFrameRef = useRef<number | null>(null);
   const previousPhaseRef = useRef<HudState["phase"]>("idle");
   const audioSettingsLoadedRef = useRef(false);
-  const boardKey = useMemo(() => `pixi-full-v145-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
+  const boardKey = useMemo(() => `pixi-full-v146-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
   const canPlay = runAllowed || lifeState.lives > 0;
   const outOfLives = lifeState.loaded && lifeState.lives <= 0 && !canPlay;
   const currentBestScore = getBestScore(bestScores, levelIndex);
@@ -403,6 +407,81 @@ export default function RuneRushPixiFullPage() {
   const collectRuneGoals = Object.entries(hud.collect ?? {})
     .filter((entry): entry is [Rune, number] => (entry[1] ?? 0) > 0 && !!RUNE_IMAGES[entry[0] as Rune])
     .map(([rune]) => ({ rune }));
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const shell = pageShellRef.current;
+    const infoHub = infoHubRef.current;
+    const bottomBar = bottomBarRef.current;
+    if (!shell || !infoHub || !bottomBar) return;
+
+    const mobileQuery = window.matchMedia("(max-width: 460px)");
+    const readPx = (value: string) => {
+      const n = Number.parseFloat(value);
+      return Number.isFinite(n) ? n : 0;
+    };
+
+    const syncLayout = () => {
+      mobileLayoutFrameRef.current = null;
+      if (!mobileQuery.matches) {
+        shell.style.removeProperty("--mobile-vh");
+        shell.style.removeProperty("--game-w");
+        return;
+      }
+
+      const viewport = window.visualViewport;
+      const viewportHeight = Math.max(320, Math.floor(viewport?.height ?? window.innerHeight));
+      const viewportWidth = Math.max(280, Math.floor(viewport?.width ?? window.innerWidth));
+      const styles = window.getComputedStyle(shell);
+      const paddingTop = readPx(styles.paddingTop);
+      const paddingRight = readPx(styles.paddingRight);
+      const paddingBottom = readPx(styles.paddingBottom);
+      const paddingLeft = readPx(styles.paddingLeft);
+      const gap = readPx(styles.rowGap || styles.gap);
+      const infoHeight = Math.ceil(infoHub.getBoundingClientRect().height);
+      const footerHeight = Math.ceil(bottomBar.getBoundingClientRect().height);
+      const verticalSpace = viewportHeight - paddingTop - paddingBottom - infoHeight - footerHeight - gap * 2;
+      const widthSpace = viewportWidth - paddingLeft - paddingRight;
+      const widthLimit = Math.max(220, Math.min(540, widthSpace));
+      const heightLimit = Math.max(180, verticalSpace);
+      const boardSize = Math.floor(Math.min(widthLimit, heightLimit));
+
+      shell.style.setProperty("--mobile-vh", `${viewportHeight}px`);
+      shell.style.setProperty("--game-w", `${boardSize}px`);
+    };
+
+    const queueLayoutSync = () => {
+      if (mobileLayoutFrameRef.current != null) return;
+      mobileLayoutFrameRef.current = window.requestAnimationFrame(syncLayout);
+    };
+
+    queueLayoutSync();
+    const firstTimer = window.setTimeout(queueLayoutSync, 80);
+    const settledTimer = window.setTimeout(queueLayoutSync, 360);
+    const observer = typeof ResizeObserver !== "undefined" ? new ResizeObserver(queueLayoutSync) : null;
+    observer?.observe(infoHub);
+    observer?.observe(bottomBar);
+    window.visualViewport?.addEventListener("resize", queueLayoutSync);
+    window.visualViewport?.addEventListener("scroll", queueLayoutSync);
+    window.addEventListener("resize", queueLayoutSync);
+    window.addEventListener("orientationchange", queueLayoutSync);
+    mobileQuery.addEventListener("change", queueLayoutSync);
+
+    return () => {
+      window.clearTimeout(firstTimer);
+      window.clearTimeout(settledTimer);
+      observer?.disconnect();
+      window.visualViewport?.removeEventListener("resize", queueLayoutSync);
+      window.visualViewport?.removeEventListener("scroll", queueLayoutSync);
+      window.removeEventListener("resize", queueLayoutSync);
+      window.removeEventListener("orientationchange", queueLayoutSync);
+      mobileQuery.removeEventListener("change", queueLayoutSync);
+      if (mobileLayoutFrameRef.current != null) {
+        window.cancelAnimationFrame(mobileLayoutFrameRef.current);
+        mobileLayoutFrameRef.current = null;
+      }
+    };
+  }, []);
 
   const fadeMusicTo = (audio: HTMLAudioElement, targetVolume: number, duration = 360) => {
     if (typeof window === "undefined") {
@@ -539,7 +618,7 @@ export default function RuneRushPixiFullPage() {
   };
 
   useEffect(() => {
-    console.log("[Rune Rush Page] loaded v145-mobile-safe-popups");
+    console.log("[Rune Rush Page] loaded v146-measured-mobile-board");
     return () => {
       if (musicFadeRef.current != null) window.cancelAnimationFrame(musicFadeRef.current);
       musicFadeRef.current = null;
@@ -804,8 +883,8 @@ export default function RuneRushPixiFullPage() {
   };
 
   return (
-    <main className={outOfLives ? "pageShell outOfLives" : "pageShell"}>
-      <section className="infoHubBoard" aria-label="Rune Rush information">
+    <main ref={pageShellRef} className={outOfLives ? "pageShell outOfLives" : "pageShell"}>
+      <section ref={infoHubRef} className="infoHubBoard" aria-label="Rune Rush information">
       <header className="topNav">
         <div className="levelPill">
           <span className="levelCompact">Lvl</span>
@@ -912,7 +991,7 @@ export default function RuneRushPixiFullPage() {
         />
       )}
 
-      <footer className="bottomBar">
+      <footer ref={bottomBarRef} className="bottomBar">
         <button
           type="button"
           className="arrowBtn bottomLevelArrow"
@@ -2229,11 +2308,11 @@ export default function RuneRushPixiFullPage() {
           }
 
           .pageShell {
-            --game-w: min(98vw, 540px, calc(100dvh - 168px));
-            height: 100svh;
-            height: 100dvh;
+            --game-w: min(98vw, 540px);
+            height: var(--mobile-vh, 100svh);
+            height: var(--mobile-vh, 100dvh);
             min-height: 0;
-            max-height: 100dvh;
+            max-height: var(--mobile-vh, 100dvh);
             justify-content: space-between;
             gap: clamp(4px, 0.75dvh, 8px);
             overflow: hidden;
@@ -2330,7 +2409,7 @@ export default function RuneRushPixiFullPage() {
 
         @media (max-width: 460px) and (max-height: 760px) {
           .pageShell {
-            --game-w: min(98vw, 540px, calc(100dvh - 146px));
+            --game-w: min(98vw, 540px);
             gap: 2px;
             padding-top: max(12px, calc(env(safe-area-inset-top) + 8px));
             padding-bottom: max(14px, calc(env(safe-area-inset-bottom) + 10px));
