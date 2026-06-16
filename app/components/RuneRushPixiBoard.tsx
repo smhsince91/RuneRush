@@ -134,7 +134,7 @@ const SPECIAL_CHAIN_GROUP_GAP_MS = 40;
 const SPECIAL_CHAIN_GAP_MS = 8;
 const HINT_IDLE_MS = 8500;
 const HINT_REPEAT_MS = 4700;
-const BUILD_TAG = "pixifull-v141-easier-snappy-stable";
+const BUILD_TAG = "pixifull-v142-mobile-audio-polish";
 
 const PALETTE: Rune[] = ["blue", "spiral", "orange", "triangle", "leaf", "time", "moon"];
 const FALLBACK: Record<Rune, string> = {
@@ -235,23 +235,23 @@ const PREMIUM_TRACE_SOURCES = [
 const ORIGINAL_SFX: Record<SfxKey, string[]> = {
   swap: ["/sfx/swap.mp3", "/sfx/swap.wav", "/sfx/click.mp3", "/sfx/move.mp3", "/sounds/swap.mp3", "/sounds/click.mp3"],
   match: ["/sfx/match.mp3", "/sfx/match.wav", "/sfx/clear.mp3", "/sfx/pop.mp3", "/sounds/match.mp3", "/sounds/clear.mp3"],
-  clear: ["/sfx/clear.mp3", "/sfx/pop.mp3", "/sounds/clear.mp3"],
-  runicClear: ["/sfx/runic-clear.mp3", "/sfx/clear-special.mp3", "/sfx/sparkle-clear.mp3", "/sounds/runic-clear.mp3"],
-  chain: ["/sfx/chain.mp3", "/sfx/combo.mp3", "/sfx/special-chain.mp3", "/sounds/chain.mp3"],
-  special: ["/sfx/special.mp3", "/sfx/powerup.mp3", "/sfx/magic.mp3", "/sounds/special.mp3"],
+  clear: ["/sfx/match.mp3", "/sfx/sap.mp3", "/sfx/fogclear.mp3", "/sfx/clear.mp3", "/sfx/pop.mp3", "/sounds/clear.mp3"],
+  runicClear: ["/sfx/zap123.mp3", "/sfx/magic.mp3", "/sfx/zap.mp3", "/sfx/runic-clear.mp3", "/sfx/clear-special.mp3", "/sounds/runic-clear.mp3"],
+  chain: ["/sfx/123.mp3", "/sfx/match.mp3", "/sfx/sap.mp3", "/sfx/chain.mp3", "/sfx/combo.mp3", "/sounds/chain.mp3"],
+  special: ["/sfx/magic.mp3", "/sfx/spawn.mp3", "/sfx/sap.mp3", "/sfx/special.mp3", "/sounds/special.mp3"],
   // Generic spawn is kept only for non-premium specials and never points at spawn.mp3.
   // Lotus spawn must use spawn.mp3. Golden spawn must use goldenspawn.mp3.
-  spawn: ["/sfx/special.mp3", "/sfx/powerup.mp3", "/sounds/special.mp3"],
+  spawn: ["/sfx/sap.mp3", "/sfx/magic.mp3", "/sfx/special.mp3", "/sounds/special.mp3"],
   lotusSpawn: ["/sfx/spawn.mp3"],
   goldenSpawn: ["/sfx/goldenspawn.mp3"],
   convert: ["/sfx/clickclick.mp3", "/sfx/clickclick.wav", "/sfx/clickclick.ogg", "/sfx/clickclick.m4a", "/sfx/clickclick", "/sfx/convert.mp3", "/sfx/special-create.mp3", "/sfx/powerup.mp3", "/sounds/convert.mp3"],
-  bomb: ["/sfx/bomb.mp3", "/sfx/bomb.wav", "/sfx/pop.mp3", "/sfx/clear.mp3", "/sounds/bomb.mp3"],
+  bomb: ["/sfx/zap123.mp3", "/sfx/golden.mp3", "/sfx/magic.mp3", "/sfx/bomb.mp3", "/sounds/bomb.mp3"],
   golden: ["/sfx/zap.mp3", "/sfx/zap.wav", "/sfx/zap.ogg", "/sfx/zap.m4a", "/sfx/zap", "/sounds/zap.mp3"],
   lotus: ["/sfx/magic.mp3", "/sfx/magic.wav", "/sfx/magic.ogg", "/sfx/magic.m4a", "/sfx/lotus.mp3", "/sfx/lotus.wav", "/sfx/colorbomb.mp3", "/sfx/special.mp3", "/sounds/lotus.mp3", "/sounds/colorbomb.mp3"],
-  finale: ["/sfx/finale.mp3", "/sfx/win.mp3", "/sfx/level-complete.mp3", "/sounds/finale.mp3"],
-  fog: ["/sfx/fog.mp3", "/sfx/fog.wav", "/sfx/crumble.mp3", "/sfx/stone.mp3", "/sounds/fog.mp3", "/sounds/crumble.mp3"],
-  bad: ["/sfx/bad.mp3", "/sfx/error.mp3", "/sfx/wrong.mp3", "/sounds/bad.mp3", "/sounds/error.mp3"],
-  win: ["/sfx/win.mp3", "/sfx/level-complete.mp3", "/sfx/complete.mp3", "/sounds/win.mp3", "/sounds/complete.mp3"],
+  finale: ["/sfx/magic.mp3", "/sfx/zap123.mp3", "/sfx/123.mp3", "/sfx/finale.mp3", "/sounds/finale.mp3"],
+  fog: ["/sfx/fogclear.mp3", "/sfx/sap.mp3", "/sfx/match.mp3", "/sfx/fog.mp3", "/sounds/fog.mp3"],
+  bad: ["/sfx/swap.mp3", "/sfx/clickclick.mp3", "/sfx/bad.mp3", "/sounds/bad.mp3"],
+  win: ["/sfx/magic.mp3", "/sfx/123.mp3", "/sfx/win.mp3", "/sounds/win.mp3"],
 };
 
 const RUNE_GLOW: Record<Rune, number> = {
@@ -651,14 +651,39 @@ const clampSfxVolume = (value: unknown) => {
 };
 
 const baseSfxVolumeFor = (key: SfxKey) => {
-  if (key === "bad") return 0.34;
-  if (key === "lotus") return 0.55;
-  if (key === "lotusSpawn") return 0.52;
-  if (key === "goldenSpawn") return 0.52;
-  if (key === "spawn") return 0.44;
-  if (key === "golden") return 0.50;
-  if (key === "convert") return 0.52;
-  return 0.42;
+  if (key === "swap") return 0.22;
+  if (key === "bad") return 0.22;
+  if (key === "match") return 0.26;
+  if (key === "clear") return 0.24;
+  if (key === "chain") return 0.28;
+  if (key === "runicClear") return 0.32;
+  if (key === "lotus") return 0.36;
+  if (key === "lotusSpawn") return 0.34;
+  if (key === "goldenSpawn") return 0.34;
+  if (key === "spawn") return 0.28;
+  if (key === "golden") return 0.33;
+  if (key === "convert") return 0.30;
+  if (key === "fog") return 0.24;
+  if (key === "finale" || key === "win") return 0.34;
+  return 0.28;
+};
+
+const sfxMinGapFor = (key: SfxKey) => {
+  if (key === "swap" || key === "bad") return 32;
+  if (key === "match" || key === "clear") return 24;
+  if (key === "convert") return 46;
+  if (key === "spawn" || key === "lotusSpawn" || key === "goldenSpawn") return 72;
+  if (key === "chain") return 96;
+  if (key === "golden" || key === "runicClear") return 120;
+  if (key === "lotus" || key === "finale" || key === "win") return 160;
+  return 60;
+};
+
+const sfxPolyphonyLimitFor = (key: SfxKey) => {
+  if (key === "match" || key === "clear" || key === "convert") return 5;
+  if (key === "swap" || key === "bad") return 4;
+  if (key === "chain" || key === "spawn" || key === "lotusSpawn" || key === "goldenSpawn") return 4;
+  return 3;
 };
 
 export default function RuneRushPixiBoard({ levelIndex, onHud, soundOn = true, soundVolume = 0.85, onLevelComplete, onLevelFailed }: Props) {
@@ -671,6 +696,8 @@ export default function RuneRushPixiBoard({ levelIndex, onHud, soundOn = true, s
   const audioCtxRef = useRef<AudioContext | null>(null);
   const originalSfxRef = useRef<Partial<Record<SfxKey, HTMLAudioElement[]>>>({});
   const audioPrimedRef = useRef(false);
+  const lastSfxAtRef = useRef<Partial<Record<SfxKey, number>>>({});
+  const activeSfxCountRef = useRef(0);
 
   useEffect(() => {
     onHudRef.current = onHud;
@@ -698,6 +725,14 @@ export default function RuneRushPixiBoard({ levelIndex, onHud, soundOn = true, s
     if (!w.__tobyRuneRushSfxBank) w.__tobyRuneRushSfxBank = {};
     originalSfxRef.current = w.__tobyRuneRushSfxBank;
     return originalSfxRef.current;
+  };
+
+  const shouldSkipSfx = (key: SfxKey) => {
+    const now = typeof performance !== "undefined" ? performance.now() : Date.now();
+    const last = lastSfxAtRef.current[key] ?? 0;
+    if (now - last < sfxMinGapFor(key)) return true;
+    lastSfxAtRef.current[key] = now;
+    return false;
   };
 
   const primeOriginalSfxBank = () => {
@@ -778,12 +813,14 @@ export default function RuneRushPixiBoard({ levelIndex, onHud, soundOn = true, s
     const bank = getSharedSfxBank();
     const candidates = bank[key] ?? [];
     if (!candidates.length) return false;
+    if (activeSfxCountRef.current >= sfxPolyphonyLimitFor(key)) return true;
 
     // Priority is controlled by ORIGINAL_SFX order:
     // lotus -> /sfx/magic.mp3 first, lotusSpawn -> ONLY /sfx/spawn.mp3,
     // goldenSpawn -> ONLY /sfx/goldenspawn.mp3, convert -> /sfx/clickclick.mp3 first.
-    // Clone ready sounds so rapid cascades can overlap without one sound cutting off another.
+    // Clone ready sounds so cascades can overlap lightly without turning crunchy on mobile speakers.
     for (const audio of candidates) {
+      let reservedSlot = false;
       try {
         if (audio.error || audio.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) continue;
         if (audio.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
@@ -791,13 +828,35 @@ export default function RuneRushPixiBoard({ levelIndex, onHud, soundOn = true, s
           continue;
         }
         const player = audio.cloneNode(true) as HTMLAudioElement;
-        player.volume = baseSfxVolumeFor(key) * soundVolumeRef.current;
+        activeSfxCountRef.current += 1;
+        reservedSlot = true;
+        let cleaned = false;
+        let cleanupTimer: number | null = null;
+        const cleanup = () => {
+          if (cleaned) return;
+          cleaned = true;
+          if (cleanupTimer != null && typeof window !== "undefined") window.clearTimeout(cleanupTimer);
+          activeSfxCountRef.current = Math.max(0, activeSfxCountRef.current - 1);
+          try {
+            player.pause();
+            player.removeAttribute("src");
+            player.load();
+          } catch {}
+        };
+
+        player.volume = Math.min(0.44, baseSfxVolumeFor(key) * soundVolumeRef.current);
         player.muted = false;
+        player.playbackRate = 1;
         player.currentTime = 0;
+        player.addEventListener("ended", cleanup, { once: true });
+        player.addEventListener("error", cleanup, { once: true });
+        if (typeof window !== "undefined") cleanupTimer = window.setTimeout(cleanup, 1800);
         const result = player.play();
-        if (result && typeof result.catch === "function") result.catch(() => {});
+        if (result && typeof result.catch === "function") result.catch(cleanup);
         return true;
-      } catch {}
+      } catch {
+        if (reservedSlot) activeSfxCountRef.current = Math.max(0, activeSfxCountRef.current - 1);
+      }
     }
 
     return false;
@@ -872,6 +931,7 @@ export default function RuneRushPixiBoard({ levelIndex, onHud, soundOn = true, s
 
   const playSfx = (key: SfxKey) => {
     if (!soundOnRef.current || soundVolumeRef.current <= 0.001) return;
+    if (shouldSkipSfx(key)) return;
     if (playOriginalSfx(key)) return;
 
     const sparkleRun = (base = 760, delay = 0, gain = 0.008) => {

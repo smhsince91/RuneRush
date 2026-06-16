@@ -388,7 +388,7 @@ export default function RuneRushPixiFullPage() {
   const soundMenuRef = useRef<HTMLDivElement | null>(null);
   const previousPhaseRef = useRef<HudState["phase"]>("idle");
   const audioSettingsLoadedRef = useRef(false);
-  const boardKey = useMemo(() => `pixi-full-v141-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
+  const boardKey = useMemo(() => `pixi-full-v142-${levelIndex}-${resetKey}`, [levelIndex, resetKey]);
   const canPlay = runAllowed || lifeState.lives > 0;
   const currentBestScore = getBestScore(bestScores, levelIndex);
   const displayedBestScore = currentBestScore;
@@ -538,7 +538,7 @@ export default function RuneRushPixiFullPage() {
   };
 
   useEffect(() => {
-    console.log("[Rune Rush Page] loaded v141-easier-snappy-stable");
+    console.log("[Rune Rush Page] loaded v142-mobile-audio-polish");
     return () => {
       if (musicFadeRef.current != null) window.cancelAnimationFrame(musicFadeRef.current);
       musicFadeRef.current = null;
@@ -1077,7 +1077,7 @@ export default function RuneRushPixiFullPage() {
         }
 
         .pageShell {
-          --game-w: min(97vw, 570px, calc(100dvh - 142px));
+          --game-w: min(98vw, 570px, calc(100dvh - 128px));
         }
 
         .infoHubBoard,
@@ -2165,17 +2165,18 @@ export default function RuneRushPixiFullPage() {
 
         @media (max-width: 460px) {
           .pageShell {
-            --game-w: min(97vw, 530px, calc(100dvh - 188px));
-            gap: 3px;
-            padding-left: 7px;
-            padding-right: 7px;
-            padding-bottom: max(2px, env(safe-area-inset-bottom));
+            --game-w: min(98vw, 540px, calc(100dvh - 154px));
+            gap: 2px;
+            padding-top: max(5px, env(safe-area-inset-top));
+            padding-left: 6px;
+            padding-right: 6px;
+            padding-bottom: max(1px, env(safe-area-inset-bottom));
           }
-          .infoHubBoard { grid-template-columns: minmax(44px, 0.72fr) minmax(58px, 0.95fr) repeat(4, minmax(41px, 0.72fr)); padding: 5px; border-radius: 15px; gap: 3px; }
+          .infoHubBoard { grid-template-columns: minmax(44px, 0.72fr) minmax(58px, 0.95fr) repeat(4, minmax(41px, 0.72fr)); padding: 4px; border-radius: 15px; gap: 3px; }
           .topNav { grid-template-columns: 1fr 1fr; gap: 6px; }
           .infoHubBoard .topNav { display: contents; }
           .arrowBtn, .levelPill, .lifePill { height: 44px; border-radius: 14px; }
-          .infoHubBoard .levelPill, .infoHubBoard .lifePill { height: 29px; border-radius: 10px; gap: 4px; padding: 3px 4px; font-size: 8.5px; letter-spacing: 0; }
+          .infoHubBoard .levelPill, .infoHubBoard .lifePill { height: 28px; border-radius: 10px; gap: 4px; padding: 3px 4px; font-size: 8.4px; letter-spacing: 0; }
           .levelPill b, .lifePill b { font-size: 24px; }
           .infoHubBoard .levelPill b, .infoHubBoard .lifePill b { font-size: 15px; }
           .lifePill small { font-size: 10px; }
@@ -2183,15 +2184,15 @@ export default function RuneRushPixiFullPage() {
           .statsRow { gap: 6px; }
           .stat { min-height: 45px; border-radius: 13px; }
           .infoHubBoard .statsRow { gap: 3px; }
-          .infoHubBoard .stat { min-height: 29px; border-radius: 9px; padding: 2px 3px 3px; }
+          .infoHubBoard .stat { min-height: 28px; border-radius: 9px; padding: 2px 3px; }
           .stat span, .eyebrow { font-size: 9px; }
           .infoHubBoard .stat span, .infoHubBoard .eyebrow { font-size: 7.3px; letter-spacing: 0; }
           .stat b { font-size: 20px; }
           .infoHubBoard .stat b { font-size: 11px; }
           .infoHubBoard .stat:nth-child(4) b,
           .infoHubBoard .bestStat b { font-size: 10.2px; }
-          .goalCard { min-height: 50px; padding: 6px 8px; border-radius: 15px; grid-template-columns: 31px 1fr; }
-          .infoHubBoard .goalCard { min-height: 45px; padding: 5px 6px; border-radius: 11px; grid-template-columns: minmax(0, 1fr); gap: 0; }
+          .goalCard { min-height: 48px; padding: 5px 8px; border-radius: 15px; grid-template-columns: 31px 1fr; }
+          .infoHubBoard .goalCard { min-height: 41px; padding: 4px 6px; border-radius: 11px; grid-template-columns: minmax(0, 1fr); gap: 0; }
           .goalTitle { font-size: 14px; }
           .infoHubBoard .goalTitle { font-size: 12.5px; }
           .goalCount { font-size: 15px; }
@@ -2209,16 +2210,27 @@ export default function RuneRushPixiFullPage() {
           .infoHubBoard .ingredientHubShowcase img:last-child { width: 21px; height: 21px; }
           .messageLine { display: none; }
           .infoHubLine { font-size: 9.5px; margin-top: 3px; }
-          .infoHubBoard .infoHubLine { font-size: 8.1px; margin-top: 2px; line-height: 1.1; }
+          .infoHubBoard .infoHubLine { font-size: 7.8px; margin-top: 1px; line-height: 1.05; }
           .boardFrame { width: var(--game-w); min-width: min(282px, 94vw); padding: 0; border-radius: 20px; }
-          .bottomBar { grid-template-columns: 0.66fr 1fr 1fr 0.66fr; gap: 5px; }
-          .bottomBar button { height: 37px; font-size: 9.5px; border-radius: 14px; }
-          .bottomLevelArrow { font-size: 24px; }
+          .bottomBar { grid-template-columns: 0.64fr 1fr 1fr 0.64fr; gap: 4px; }
+          .bottomBar button { height: 34px; font-size: 8.8px; border-radius: 13px; padding-inline: 5px; }
+          .bottomLevelArrow { font-size: 22px; }
+        }
+
+        @media (max-width: 460px) and (max-height: 760px) {
+          .pageShell {
+            --game-w: min(98vw, 540px, calc(100dvh - 140px));
+            gap: 1px;
+          }
+          .infoHubBoard { padding: 4px; gap: 2px; }
+          .infoHubBoard .goalCard { min-height: 39px; padding-block: 3px; }
+          .infoHubBoard .infoHubLine { display: none; }
+          .bottomBar button { height: 33px; font-size: 8.5px; }
         }
 
         @media (min-width: 760px) {
           .pageShell { gap: 4px; }
-          .boardFrame { width: min(97vw, 570px, calc(100dvh - 140px)); }
+          .boardFrame { width: min(98vw, 570px, calc(100dvh - 126px)); }
         }
 
         .starRow {
